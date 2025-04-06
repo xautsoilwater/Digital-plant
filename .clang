@@ -1,0 +1,5 @@
+-std=c++17
+-I${workspaceFolder}
+-I${workspaceFolder}/src/core/include
+-I/usr/include
+-I/usr/local/include 

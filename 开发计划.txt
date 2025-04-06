@@ -1,0 +1,308 @@
+
+项目名称： 数字作物 (Digital Crop)
+
+核心开发工具： Cursor IDE (利用其 GPT-4/Claude 等 AI 代码生成、编辑、问答和调试能力)
+
+辅助工具：
+
+版本控制: Git (配合 GitHub/GitLab/Bitbucket) - Cursor 内置 Git 支持。
+
+项目管理: Trello / Jira / Asana (或简单的 Markdown TODO list) - 用于任务跟踪。
+
+构建系统: CMake (C++), Python's setuptools/pip, Unity/Unreal Build System。
+
+游戏引擎: Unity Hub & Editor / Unreal Engine & Editor。
+
+依赖库: (根据技术选型确定) Eigen, Boost.Python/pybind11, NumPy, SciPy, etc.
+
+开发理念: 迭代开发，敏捷方法，充分利用 Cursor 的 AI 能力加速开发周期，但强调人工审查和验证 AI 生成的代码。
+
+开发计划 (分阶段):
+
+Phase 0: 环境搭建与基础架构 (预计 1-2 周)
+
+目标: 建立开发环境，确定核心技术栈细节，搭建项目骨架，验证 C++/Python/游戏引擎的初步通信。
+
+任务:
+
+环境配置:
+
+安装 Cursor IDE, 配置 Git, C++ 编译器 (MSVC/GCC/Clang), Python 环境 (e.g., Anaconda/Miniconda), CMake, Unity/Unreal Engine。
+
+Cursor 应用: 使用 Cursor 的终端或命令面板快速安装和配置工具。询问 Cursor 关于特定库的安装和配置步骤。
+
+项目结构创建:
+
+使用 Git 初始化仓库。
+
+规划 C++, Python, 游戏引擎项目的目录结构。
+
+Cursor 应用: "Cursor, suggest a project structure for a mixed C++/Python project interacting with Unity/Unreal." 生成基础的 CMakeLists.txt 和 Python setup.py / pyproject.toml 文件结构。
+
+技术选型确认:
+
+最终确定 C++ 数学库 (e.g., Eigen), Python 绑定库 (pybind11 优先于 Boost.Python), 游戏引擎版本。
+
+Cursor 应用: "Cursor, compare pybind11 and Boost.Python for C++/Python bindings." "Cursor, what are the pros and cons of using Eigen for 3D geometry calculations?"
+
+Hello, World! -跨语言通信验证:
+
+创建一个简单的 C++ 函数 (e.g., add(a, b)).
+
+使用 pybind11 将其暴露给 Python。
+
+在 Python 中调用该 C++ 函数。
+
+在游戏引擎中 (e.g., Unity C# script) 通过某种方式 (e.g., 嵌入 Python 解释器，或通过本地网络/IPC，或直接 C++ 插件) 调用 Python 脚本或 C++ 库，并显示结果。
+
+Cursor 应用: "Cursor, generate pybind11 boilerplate to bind a simple C++ function int add(int a, int b)." "Cursor, show me a basic example of calling a Python script from Unity C#." "Cursor, help debug this pybind11 compilation error."
+
+里程碑: 成功实现从游戏引擎调用 Python，Python 调用 C++，并返回值，验证了基本的技术通路。
+
+Phase 1: 核心结构生成与可视化 (预计 4-6 周)
+
+目标: 实现基于 L-System 的基本植物结构生成，并在游戏引擎中可视化静态或简单生长的形态。
+
+任务:
+
+L-System 解释器 (C++ Core):
+
+设计 L-System 规则的数据结构 (字符、参数、条件、概率等)。
+
+实现规则匹配和迭代生成字符串的算法。
+
+Cursor 应用: "Cursor, design a C++ class structure for representing L-System rules." "Cursor, implement the core L-System iteration algorithm in C++ based on this rule structure." "Cursor, explain this recursive generation logic."
+
+几何解释器 (Turtle Graphics - C++ Core):
+
+实现一个“海龟”类，根据 L-System 生成的字符串指令（如 F, +, -, [, ]）生成顶点、线段或简单的几何体（圆柱代表茎，多边形代表叶）。
+
+定义顶点、面、拓扑关系的基本数据结构。
+
+Cursor 应用: "Cursor, implement a 3D Turtle Graphics class in C++ using Eigen for vector math." "Cursor, generate code to create a simple cylinder mesh given radius, height, and position/orientation."
+
+MTG 数据结构 (C++ Core):
+
+设计并实现 Multi-scale Tree Graph (MTG) 的节点和边结构，用于存储植物的拓扑关系和属性。
+
+实现将 L-System 生成过程映射到 MTG 构建的逻辑。
+
+Cursor 应用: "Cursor, design C++ classes for MTG nodes and edges, including methods for adding children and accessing neighbors." "Cursor, refactor this MTG traversal code for clarity."
+
+Python 绑定与接口:
+
+使用 pybind11 绑定 C++ 的 L-System 解释器、几何解释器和 MTG 相关类。
+
+创建 Python API，允许用户通过 Python 脚本定义 L-System 规则、启动生成过程、访问生成的几何或 MTG 数据。
+
+Cursor 应用: "Cursor, generate pybind11 bindings for the L-System interpreter class." "Cursor, create a Python wrapper class PlantGenerator that uses the C++ core."
+
+游戏引擎可视化:
+
+在游戏引擎中创建脚本，用于：
+
+调用 Python API 获取生成的几何数据（顶点、面、材质信息）。
+
+动态创建或更新 Mesh 对象来渲染植物模型。
+
+Cursor 应用: "Cursor, write a Unity C# script to dynamically create a mesh from vertex and triangle lists received (e.g., via JSON or a direct C++ plugin call)." "Cursor, show how to apply a simple material to a procedurally generated mesh in Unreal Engine."
+
+里程碑: 能够在游戏引擎中输入简单的 L-System 规则，看到生成的对应三维植物结构。
+
+Phase 2: 基本生理与生长耦合 (预计 4-6 周)
+
+目标: 实现简化的光合作用模型和碳分配逻辑，驱动 L-System 规则中的参数变化，实现简单的动态生长。
+
+任务:
+
+简化光合模型 (Python/C++):
+
+实现一个基础的光合速率计算函数（可先用 Python 实现，性能瓶颈时再移至 C++），输入光照强度、叶面积，输出碳水化合物产生量。初期光照可简化为定值或简单函数。
+
+将光合能力与 MTG 叶片节点关联。
+
+Cursor 应用: "Cursor, implement a simple photosynthesis function in Python based on a light response curve (e.g., rectangular hyperbola)." "Cursor, add a 'photosynthesis_rate' attribute to the MTG leaf node class in C++ and generate Python bindings."
+
+简化资源分配模型 (Python):
+
+实现一个简单的碳分配逻辑（如按器官类型比例分配，或简单的源库优先级）。将碳分配给各个器官节点（存储在 MTG 属性中）。
+
+Cursor 应用: "Cursor, write a Python function that distributes 'carbon' among MTG nodes based on predefined priorities (e.g., {'leaf': 0.5, 'stem': 0.3, 'root': 0.2})."
+
+生长参数化 L-System (C++ & Python):
+
+修改 L-System 解释器，使其规则可以包含参数（e.g., F(length, radius)）。
+
+让 Python 端的生长控制逻辑能够根据分配到的资源量，计算出下一时间步器官的生长增量（如长度、半径增加），并更新 L-System 规则中的参数或 MTG 节点属性。
+
+L-System 迭代时使用这些更新后的参数。
+
+Cursor 应用: "Cursor, modify the C++ L-System interpreter to handle parametric rules like A(x) -> F(x) A(x*1.1)." "Cursor, write Python code to update the 'length' parameter of MTG stem nodes based on allocated 'carbon'."
+
+动态可视化更新:
+
+在游戏引擎中，实现每隔一定仿真时间步，重新获取更新后的几何数据并刷新模型显示。
+
+Cursor 应用: "Cursor, refactor the Unity C# visualization script to periodically query the Python backend for updated plant geometry and smoothly update the mesh."
+
+里程碑: 植物模型能够根据简单的光合作用和分配规则，随时间步模拟动态生长（如茎伸长、叶片变大）。
+
+Phase 3: 环境交互与详细生理模型 (预计 6-8 周)
+
+目标: 引入更真实的环境输入，实现光照竞争模型，加入水分胁迫等生理过程。
+
+任务:
+
+环境模块 (Python/C++):
+
+实现读取标准气象数据格式（如 CSV）。
+
+模拟冠层内光照衰减（可从简单 Beer 定律开始）。
+
+Cursor 应用: "Cursor, write a Python class to parse weather data from a CSV file." "Cursor, implement a basic Beer's Law light attenuation calculation within the plant structure (needs access to leaf positions/LAI)." "Cursor, research C++ libraries for efficient spatial queries needed for light modeling."
+
+详细光合模型 (C++/Python):
+
+实现更精细的光合模型，如 Farquhar 模型，考虑 CO2、温度等因素。
+
+将光照模型计算出的每个叶片接收的光强传入光合模型。
+
+Cursor 应用: "Cursor, implement the Farquhar photosynthesis model equations in C++ (or Python if performance allows)." "Cursor, help debug the integration between the light model output and the photosynthesis input."
+
+水分胁迫模型 (Python/C++):
+
+实现简单的土壤水分模块。
+
+模拟根系吸水、蒸腾作用（可用 Penman-Monteith 简化形式）。
+
+建立水分胁迫对光合和生长的影响（如降低气孔导度、减少分配到叶片的资源）。
+
+Cursor 应用: "Cursor, outline a simple soil water balance model." "Cursor, implement a function linking water stress factor to stomatal conductance reduction." "Cursor, explain the Penman-Monteith equation."
+
+形态可塑性:
+
+使 L-System 规则能响应环境信号（如向光性：根据光照方向调整分枝角度）。
+
+Cursor 应用: "Cursor, modify the L-System interpreter to allow rules to query environmental data (e.g., light vector) via the MTG node it's operating on." "Cursor, generate code for adjusting turtle turning angles based on a light direction vector."
+
+里程碑: 植物生长能显著响应光照分布和水分状况的变化，形态表现出一定的可塑性。
+
+Phase 4: GUI、用户体验与数据 I/O (预计 4-6 周)
+
+目标: 开发用户友好的图形界面，完善参数配置、仿真控制和结果输出功能。
+
+任务:
+
+游戏引擎 GUI 开发:
+
+使用 Unity UI / Unreal UMG 创建主界面。
+
+实现参数输入面板（作物参数、环境设置）。
+
+添加仿真控制按钮（开始、暂停、重置、步进）。
+
+创建图表显示区域（用于显示生长曲线）。
+
+Cursor 应用: "Cursor, create a basic UI layout in Unity using UI Toolkit with input fields for 'light intensity' and 'temperature'." "Cursor, write C# code to handle button clicks for 'Start Simulation' and 'Pause Simulation'." "Cursor, find a library or method to draw simple line charts within Unity/Unreal UI."
+
+参数管理 (Python/JSON/YAML):
+
+设计配置文件格式（JSON 或 YAML）存储作物品种参数和环境设置。
+
+实现 Python 代码加载和解析配置文件。
+
+Cursor 应用: "Cursor, generate Python code to load plant parameters from a YAML file using PyYAML." "Cursor, design a JSON schema for configuring simulation settings."
+
+数据输出:
+
+实现将关键生长指标（LAI, Biomass, Height）随时间保存为 CSV 文件。
+
+实现将特定时间点的三维模型导出为标准格式（如 OBJ, glTF）。
+
+Cursor 应用: "Cursor, write Python code to append simulation data (time, LAI, biomass) to a CSV file." "Cursor, generate C++ or Python code to export the plant mesh data (vertices, faces) to an OBJ file format."
+
+里程碑: 用户可以通过 GUI 配置、运行仿真，并能查看基本的图表结果和导出模型。软件初步具备可用性。
+
+Phase 5: 模型验证、性能优化与文档 (预计 4-6 周)
+
+目标: 对模型进行初步验证，优化性能瓶颈，编写用户和开发者文档。
+
+任务:
+
+模型参数校准与验证:
+
+选择一种目标作物和实验数据集。
+
+调整模型参数（光合、分配、L-System 规则参数），使仿真结果（生长曲线、最终形态）与实验数据匹配。
+
+Cursor 应用: (辅助理解) "Cursor, explain common methods for plant model calibration." (辅助编码) "Cursor, help write scripts to automate running simulations with different parameter sets."
+
+性能分析与优化:
+
+使用性能分析工具 (Python's cProfile, C++ profilers, Game Engine profilers) 识别瓶颈。
+
+优化关键算法（如光照计算、几何更新）。考虑 C++ 并行化 (OpenMP/TBB) 或 GPU 加速 (CUDA/OpenCL，若有必要且资源允许)。
+
+Cursor 应用: "Cursor, analyze this Python code block for performance bottlenecks." "Cursor, suggest ways to optimize this C++ loop." "Cursor, show an example of using OpenMP to parallelize this 'for' loop in C++." "Cursor, refactor this C# code in Unity for better performance."
+
+代码清理与重构:
+
+审查代码，提高可读性、可维护性。
+
+Cursor 应用: "Cursor, review this Python module for code style issues (PEP 8)." "Cursor, refactor this complex function into smaller, more manageable units." "Cursor, identify and remove unused code."
+
+文档编写:
+
+编写用户手册（如何安装、配置、运行、解读结果）。
+
+编写开发者文档（架构说明、API 参考、模块介绍）。
+
+Cursor 应用: "Cursor, generate docstrings for all functions in this Python file." "Cursor, write comments explaining the purpose of this C++ class." "Cursor, create a basic Markdown structure for the user manual."
+
+单元测试与集成测试:
+
+为核心模块（L-System, 生理模型, 参数加载等）编写单元测试。
+
+进行集成测试，确保各模块协同工作正常。
+
+Cursor 应用: "Cursor, generate basic pytest unit tests for this Python function." "Cursor, create Google Test boilerplate for this C++ class."
+
+里程碑: 软件性能满足基本要求，核心功能经过初步验证，具备基本的文档和测试覆盖，达到 Release Candidate 状态。
+
+Phase 6: 持续开发与扩展 (长期)
+
+目标: 根据用户反馈和研究需求，不断迭代、修复 Bug、添加新功能。
+
+任务:
+
+支持更多作物品种。
+
+添加更复杂的生理过程（养分循环、开花结实、胁迫响应）。
+
+集成病虫害模型。
+
+支持基因型参数化。
+
+与其他模型（气候、土壤、农场管理）集成。
+
+提升可视化效果（更精细纹理、动画）。
+
+Cursor 应用: 持续用于新功能开发、代码理解、重构、调试和文档更新。
+
+使用 Cursor 的最佳实践:
+
+明确提问: 向 Cursor 提出具体、清晰的问题或指令。
+
+提供上下文: 使用 Cursor 的 "Chat with selected code" 或 "@Codebase" 功能，让 AI 了解当前代码环境。
+
+迭代优化: 不要期望一次性生成完美代码。与 Cursor 对话，逐步细化和修正。
+
+批判性审查: 永远不要盲目接受 AI 生成的代码。 仔细阅读、理解、测试和修改。AI 是助手，不是最终决策者。
+
+学习为主: 利用 Cursor 的解释功能学习新的库、API、算法和编程范式。
+
+专注于“连接”: 让 AI 处理重复性、模板化的代码，开发者专注于核心逻辑、创新算法和系统集成。
+
+版本控制: 在使用 Cursor 进行较大修改前后，务必提交代码到 Git，方便回滚。
+
+这个计划提供了一个详细的路线图。实际开发中会遇到各种预料之外的问题，需要灵活调整。但基于这个框架，并有效利用 Cursor 的能力，可以显著提高“数字作物”软件的开发效率和质量。祝您开发顺利！
